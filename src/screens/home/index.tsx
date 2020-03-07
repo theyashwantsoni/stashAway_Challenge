@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {  FlatList, AsyncStorage, ImageBackground, Image,  Text, View, StyleSheet, LayoutAnimation, Platform, UIManager, TouchableOpacity, Button, Picker, SafeAreaView} from 'react-native';
 import {  NavigationScreenProp } from 'react-navigation';
 import FormInput from '../../components/common/form-input';
-import Icon from 'react-native-vector-icons/Entypo';
-import FaIcon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import EnIcon from 'react-native-vector-icons/Entypo';
 
 interface props{
   navigation: NavigationScreenProp<any,any>
@@ -40,16 +40,16 @@ export default class HomeScreen extends Component<props, state> {
  
     HeaderLocationIcon = () =>{
       return (
-      <View style={{backgroundColor:"white",paddingHorizontal:20,flexDirection:"row",alignItems:"center",position:"absolute",top:0,right:0}}>
+      <View style={{backgroundColor:"#182C61",paddingHorizontal:20,flexDirection:"row",alignItems:"center",position:"absolute",top:0,right:0}}>
           <Picker
                 prompt="Select country"
-                style={{width: 20,padding:0}}
+                style={{width: 60,padding:0}}
                 onValueChange={(itemValue, itemIndex) =>
                     this.handleChangeOption(itemValue)
                 }>
                 {this.createOptions()}
           </Picker>
-          <FaIcon name="map-marked" size={25} style={{marginLeft:-34}} color="#6a8680" />
+          <EnIcon name="location" size={25} style={{marginLeft:-34}} color="white" />
          </View>
       )
     }
@@ -108,23 +108,22 @@ export default class HomeScreen extends Component<props, state> {
 
   item = ( item :any ) => {    
     return (
-        <TouchableOpacity activeOpacity={0.8} onPress={()=>{this.changeLayout(item.index)}}>
-          <View style={{ height: this.state.expandedIndex==item.index ? 180 : 120,overflow:'hidden',backgroundColor:"white",paddingVertical:20,width:'95%',alignSelf:'center',marginVertical:10,borderRadius:10}}>
-            <View  style={styles.item}>
-              <View style={styles.image}></View>
-              <View style={styles.iteminfo}>
-                  <Text style={styles.itemTitle}>{item.item.Brand}</Text>
+          <View style={{paddingVertical:10,flexDirection:'row',alignSelf:'center',marginVertical:5,width:"90%"}}>
+              <View style={styles.itemLeftBody}>
+                  <Text style={styles.itemTitle}>{item.item.Variety}</Text>
                   <Text style={styles.itemPara}>{item.item.Country}</Text>
-                  <Text style={styles.itemPara}>{item.item['Top Ten']}</Text>
-                  <View style={styles.ratingLabel}><Text style={{fontSize:16,color:"#fff"}}>{item.item.Stars}</Text></View>
+                  <Text style={styles.itemVariety}>{item.item.Brand}</Text>
+                  <Text style={{fontFamily:'Montserrat-Regular'}}>{item.item.Style}</Text>
+                  <View style={styles.ratingLabel}>
+                    <Text style={{fontSize:12,color:'white',fontFamily:'Montserrat-Medium'}}>{item.item.Stars}</Text>
+                  </View>
               </View>
-            </View>
-            <View  style={styles.item2}>
-              <View style={{width:"100%"}}><Text >{item.item.Variety}</Text></View>
-              <View style={{width:"100%"}}><Text >{item.item.Style}</Text></View>
-            </View>
+              <View style={styles.itemRightBody}>
+                <Text style={styles.itemYearTag}>{item.item['Top Ten'].split(' ')[0]}</Text>
+                <Text style={styles.itemRankTag}>{item.item['Top Ten'].split(' ')[1]}</Text>
+                <Icon name="circle" style={{position:'absolute',bottom:-15,right:-12}} size={40} color="#80000040"/>
+              </View>
           </View>
-        </TouchableOpacity>
     );
     }
 
@@ -150,23 +149,24 @@ export default class HomeScreen extends Component<props, state> {
   render() {
     return (
       <View style={styles.mainContainer}>
-          <View style={{alignItems:"center",position:"relative",backgroundColor:'white',height:60,justifyContent:'center'}}>
-            <Text style={{fontSize:24,fontWeight:"bold",letterSpacing:2,backgroundColor:'white'}}>{'Discover'}</Text>
-            {this.HeaderLocationIcon()}
-          </View>
-          <View style={styles.locationBox}>
-            <Icon name="location-pin" size={30} color="#6a8680"/>
-            <Text style={{fontSize:16,color:"#6a8680"}}>{this.state.location!=null?this.state.location:'Not selected'}</Text>
-          </View>
-          <View style={styles.inputBox}>
-            <FormInput conf={this.state.searchBarConfig} updateState={this._filterText}/>
-          </View>
           <FlatList
             style={styles.listStyle}
             data={this.state.filteredData}
             renderItem={(item :any ) =>this.item(item)}
             keyExtractor={(item:any) => item.id}
           />
+          <View style={styles.inputBox}>
+            <FormInput conf={this.state.searchBarConfig} updateState={this._filterText}/>
+          </View>
+          <View style={styles.locationBox}>
+            <EnIcon name="location-pin" size={20} color="black"/>
+            <Text style={{fontSize:16,fontFamily:'Montserrat-Medium'}}>{this.state.location!=null?this.state.location:'Not selected'}</Text>
+          </View>
+          <View style={{alignItems:"center",position:"relative",backgroundColor:'#182C61',height:50,justifyContent:'center'}}>
+            <Icon name="search" size={25} color="white" style={{position:'absolute',left:20,bottom:15}}/>
+            <Text style={{fontSize:24,fontFamily:'Montserrat-Bold',letterSpacing:2,backgroundColor:'#182C61',color:'white'}}>{'Stash Away'}</Text>
+            {this.HeaderLocationIcon()}
+          </View>
       </View>
     );
   }
@@ -196,64 +196,80 @@ const makeid = (length:number) : string =>{
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor:"#13568A", 
     flex:1,
+    backgroundColor:'lightgrey'
   },
   inputBox: {
-    backgroundColor:"#fff",
+    backgroundColor:"#182C61",
     marginBottom:0,
     paddingVertical:15,
-    borderBottomLeftRadius:40,
-    borderBottomRightRadius:40,
+    borderTopLeftRadius:25,
+    borderTopRightRadius:25,
   },
   locationBox: {
+    position:'absolute',
+    top:20,
     flexDirection:"row",
-    alignItems:"center", 
+    alignSelf:"center", 
     backgroundColor:"white",
     paddingHorizontal:10,
-  },
-  item: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-  },
-  item2: {
-    paddingVertical:20,
-    paddingHorizontal: 20,
-
+    borderRadius:50,
+    alignItems:'center',
+    elevation:15,
+    paddingVertical:5,
+    opacity:0.6
   },
   title: {
     fontSize: 32,
     color:"#000",
   },
-  image:{
-    width:80,
-    height:80,
-    borderColor:"#000",
-    borderRadius:5,
-    backgroundColor:"#ccd8b2",
-
+  itemLeftBody:{
+    backgroundColor:'white',
+    width:'76%',
+    marginRight:'4%',
+    borderRadius:8,
+    elevation:5,
+    paddingHorizontal:15,
+    paddingVertical:10,
+    justifyContent:'center'
   },
-  iteminfo:{
-    position:"relative",
-    width:270,
-    marginHorizontal:20
+  itemRightBody:{
+    backgroundColor:'red',
+    width:'20%',
+    borderRadius:8,
+    elevation:5,
+    justifyContent:'center',
+    alignItems:'center',
+    overflow:'hidden'
   },
   itemTitle:{
-    fontSize:32,
-    // fontWeight:"900",
-    lineHeight:32,
+    fontSize:18,
     color:"#013220",
-    fontFamily:'Montserrat-Medium'
+    fontFamily:'Montserrat-Bold'
   },
   itemPara:{
     fontSize:16,
     color:"grey",
     lineHeight:26,
-    fontWeight:"800"
+    fontFamily:'Montserrat-Regular'
+  },
+  itemVariety:{
+    fontFamily:'Montserrat-Bold'
+  },
+  itemYearTag:{
+    color:'white',
+    paddingBottom:10,
+    fontSize:18,
+    fontFamily:'Montserrat-Bold'
+  },
+  itemRankTag:{
+    color:'white',
+    fontSize:24,
+    fontFamily:'Montserrat-Bold'
   },
   ratingLabel:{
     position:"absolute",
-    top:0,
+    bottom:10,
     right:10,
     paddingVertical:2,
     paddingHorizontal:15,
