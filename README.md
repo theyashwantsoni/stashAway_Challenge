@@ -43,7 +43,7 @@ Download the zip file install the latest npm  and the react native then flow som
  
 <img src="https://he-s3.s3.amazonaws.com/media/uploads/3f42e5a.png" width="200" alt="HOME">
 </td><td><img src="https://he-s3.s3.amazonaws.com/media/uploads/2e06d2a.png" width="200" alt="detail"></td>
- <td><img src="https://i.imgur.com/TU1U93n.png" width="200" alt="Data Detail"></td><td>
+ <td><img src="https://he-s3.s3.amazonaws.com/media/uploads/1e75b47.png" width="200" alt="Data Detail"></td><td>
 <img src="https://he-s3.s3.amazonaws.com/media/uploads/2802b78.png" width="200" alt="About">
 </td></tr></table>
 
