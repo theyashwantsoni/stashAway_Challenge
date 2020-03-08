@@ -16,7 +16,7 @@ React Native
 
 Download the zip file install the latest npm  and the react native then flow some basic steps as shared by facebook for react native [installtions][2]
 
-###Library
+### Library
 ``` "react-native": "0.61.5",
     "react-native-gesture-handler": "^1.6.0",
     "react-native-reanimated": "^1.7.0",
@@ -25,8 +25,6 @@ Download the zip file install the latest npm  and the react native then flow som
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^4.2.2"
 ```
-
-Say what the step will be
 
 ```
     <uses-permission android:name="android.permission.INTERNET" />
