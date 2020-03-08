@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import {  FlatList, AsyncStorage, ImageBackground, Image,  Text, View, StyleSheet, LayoutAnimation, Platform, UIManager, TouchableOpacity, Button, Picker, SafeAreaView} from 'react-native';
+import {  FlatList, AsyncStorage, ImageBackground, Image,  Text, View, StyleSheet, LayoutAnimation, Platform, UIManager, TouchableOpacity, Button, Picker, SafeAreaView, StatusBar} from 'react-native';
 import {  NavigationScreenProp } from 'react-navigation';
 import FormInput from '../../components/common/form-input';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EnIcon from 'react-native-vector-icons/Entypo';
+import AppConstant from '../../utils/appConstants';
+import UtilsFunction from '../../utils/utilsFunction';
 
 interface props{
   navigation: NavigationScreenProp<any,any>
@@ -40,7 +42,7 @@ export default class HomeScreen extends Component<props, state> {
  
     HeaderLocationIcon = () =>{
       return (
-      <View style={{backgroundColor:"#182C61",paddingHorizontal:20,flexDirection:"row",alignItems:"center",position:"absolute",top:0,right:0}}>
+      <View style={{backgroundColor:"#1F3279",paddingHorizontal:20,flexDirection:"row",alignItems:"center",position:"absolute",top:0,right:0}}>
           <Picker
                 prompt="Select country"
                 style={{width: 60,padding:0}}
@@ -49,8 +51,8 @@ export default class HomeScreen extends Component<props, state> {
                 }>
                 {this.createOptions()}
           </Picker>
-          <EnIcon name="location" size={25} style={{marginLeft:-34}} color="white" />
-         </View>
+          <EnIcon name="location" size={25} style={{marginLeft:-34}} color="white"/>
+      </View>
       )
     }
   
@@ -106,24 +108,25 @@ export default class HomeScreen extends Component<props, state> {
     this.setState({filteredData:filtered})
   }
 
-  item = ( item :any ) => {    
+  item = ( item :any) => {    
     return (
-          <View style={{paddingVertical:10,flexDirection:'row',alignSelf:'center',marginVertical:5,width:"90%"}}>
-              <View style={styles.itemLeftBody}>
-                  <Text style={styles.itemTitle}>{item.item.Variety}</Text>
-                  <Text style={styles.itemPara}>{item.item.Country}</Text>
-                  <Text style={styles.itemVariety}>{item.item.Brand}</Text>
-                  <Text style={{fontFamily:'Montserrat-Regular'}}>{item.item.Style}</Text>
-                  <View style={styles.ratingLabel}>
-                    <Text style={{fontSize:12,color:'white',fontFamily:'Montserrat-Medium'}}>{item.item.Stars}</Text>
-                  </View>
-              </View>
-              <View style={styles.itemRightBody}>
-                <Text style={styles.itemYearTag}>{item.item['Top Ten'].split(' ')[0]}</Text>
-                <Text style={styles.itemRankTag}>{item.item['Top Ten'].split(' ')[1]}</Text>
-                <Icon name="circle" style={{position:'absolute',bottom:-15,right:-12}} size={40} color="#80000040"/>
+      <View style={{paddingVertical:10,flexDirection:'row',alignSelf:'center',marginVertical:5,width:"90%"}}>
+          <View style={styles.itemLeftBody}>
+              <Text style={styles.itemTitle}>{item.item.Variety}</Text>
+              <Text style={styles.itemPara}>{item.item.Country}</Text>
+              <Text style={styles.itemVariety}>{item.item.Brand}</Text>
+              <Text style={{fontFamily:'Montserrat-Regular'}}>{item.item.Style}</Text>
+              <View style={[styles.ratingLabel,{backgroundColor:item.item.Stars>4.5?'#4FB172':'#FBA635',opacity:item.item.Stars=="NaN"?0:1}]}>
+                <Icon name="star" color="white" size={10} style={{paddingHorizontal:3}}/>
+                <Text style={{fontSize:12,color:'white',fontFamily:'Montserrat-Medium'}}>{item.item.Stars}</Text>
               </View>
           </View>
+          <View style={[styles.itemRightBody,{backgroundColor:AppConstant.colors[new UtilsFunction()._setColor(item.index)]}]}>
+            <Text style={styles.itemYearTag}>{item.item['Top Ten'].split(' ')[0]}</Text>
+            <Text style={styles.itemRankTag}>{item.item['Top Ten'].split(' ')[1]}</Text>
+            <Icon name="circle" style={{position:'absolute',bottom:-15,right:-12}} size={40} color={AppConstant.secondaryColors[new UtilsFunction()._setColor(item.index)]}/>
+          </View>
+      </View>
     );
     }
 
@@ -146,25 +149,33 @@ export default class HomeScreen extends Component<props, state> {
         console.error(error);
      });
     }
+    showSearchbox = () => {            
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      this.setState({ expanded: !this.state.expanded });  
+    }
   render() {
     return (
       <View style={styles.mainContainer}>
+          <StatusBar backgroundColor="#F5F6FA" barStyle="dark-content"></StatusBar>
           <FlatList
             style={styles.listStyle}
             data={this.state.filteredData}
-            renderItem={(item :any ) =>this.item(item)}
+            renderItem={(item :any) =>this.item(item)}
             keyExtractor={(item:any) => item.id}
           />
           <View style={styles.inputBox}>
-            <FormInput conf={this.state.searchBarConfig} updateState={this._filterText}/>
+            {this.state.expanded &&  <FormInput conf={this.state.searchBarConfig} updateState={this._filterText}/>}
+            
           </View>
           <View style={styles.locationBox}>
             <EnIcon name="location-pin" size={20} color="black"/>
             <Text style={{fontSize:16,fontFamily:'Montserrat-Medium'}}>{this.state.location!=null?this.state.location:'Not selected'}</Text>
           </View>
-          <View style={{alignItems:"center",position:"relative",backgroundColor:'#182C61',height:50,justifyContent:'center'}}>
-            <Icon name="search" size={25} color="white" style={{position:'absolute',left:20,bottom:15}}/>
-            <Text style={{fontSize:24,fontFamily:'Montserrat-Bold',letterSpacing:2,backgroundColor:'#182C61',color:'white'}}>{'Stash Away'}</Text>
+          <View style={{alignItems:"center",position:"relative",backgroundColor:'#1F3279',height:50,justifyContent:'center'}}>
+            <TouchableOpacity  style={{position:'absolute',left:20,bottom:15}} activeOpacity={1} onPress={()=>this.showSearchbox()}>
+              <Icon name="search" size={25} color="white" />
+            </TouchableOpacity>
+            <Text style={{fontSize:24,fontFamily:'Montserrat-Bold',letterSpacing:2,backgroundColor:'#1F3279',color:'white'}}>{'Eatery'}</Text>
             {this.HeaderLocationIcon()}
           </View>
       </View>
@@ -197,10 +208,10 @@ const makeid = (length:number) : string =>{
 const styles = StyleSheet.create({
   mainContainer: {
     flex:1,
-    backgroundColor:'lightgrey'
+    backgroundColor:'#F5F6FA'
   },
   inputBox: {
-    backgroundColor:"#182C61",
+    backgroundColor:"#1F3279",
     marginBottom:0,
     paddingVertical:15,
     borderTopLeftRadius:25,
@@ -217,7 +228,6 @@ const styles = StyleSheet.create({
     alignItems:'center',
     elevation:15,
     paddingVertical:5,
-    opacity:0.6
   },
   title: {
     fontSize: 32,
@@ -272,9 +282,12 @@ const styles = StyleSheet.create({
     bottom:10,
     right:10,
     paddingVertical:2,
-    paddingHorizontal:15,
+    paddingRight:10,
+    paddingLeft:5,
     backgroundColor:"#5C97D1",
-    borderRadius:50
+    borderRadius:50,
+    flexDirection:'row',
+    alignItems:'center'
   },
   listStyle: {
     width:'100%',

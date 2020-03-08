@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, StatusBar} from 'react-native';
 import {  NavigationScreenProp } from 'react-navigation';
 
 interface props{
@@ -24,14 +24,17 @@ export default class SplashScreen extends Component<props, state> {
   render() {
     return (
       <View style={styles.mainContainer}>
-          {/* <Text>{'splash'}</Text> */}
+          <StatusBar backgroundColor="#F5F6FA" barStyle="dark-content"></StatusBar>
+          <Text style={{color:'#1F3279',fontFamily:'Montserrat-Bold',fontSize:32}}>{'Eatery'}</Text>
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor:"#3884D9", 
+    backgroundColor:"#F5F6FA", 
     flex:1,
+    justifyContent:'center',
+    alignItems:'center',
   }
 });

@@ -33,13 +33,12 @@ export default class FormInput extends Component<props, state> {
     render() {
         return (
             <View style={styles.searchBox}>
-                <Icon name="search" size={22} color="#6a8680" />
                 <TextInput style={styles.inputField}
                     onChangeText={this.handleChangeInput}
                     value={this.state.input}
                     secureTextEntry={this.state.isHidden}
                     placeholder={this.state.placeholder}
-                    placeholderTextColor="#6a8680"
+                    placeholderTextColor="lightgrey"
                 />
             </View>
         )
@@ -52,12 +51,11 @@ const styles = StyleSheet.create({
         // flex:1,
         flexDirection:"row",
         // width :"95%",
-        height: 50,
-        borderColor: '#f2f2f2',
-        borderWidth : 3,
+        height: 35,
+        backgroundColor: '#f2f2f230',
         borderRadius:25,
         marginHorizontal:15,
-        paddingHorizontal:10,
+        paddingHorizontal:20,
         alignItems:"center"
     },
     searchIcon :{
@@ -66,10 +64,10 @@ const styles = StyleSheet.create({
     },
     inputField :{
         height:50,
+        color:'white'
     },
     placeholderStyle:{
         fontSize : 20,
-        color : "darkgray"
     },
     
 });
