@@ -1,18 +1,38 @@
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import HomeScreen from './src/screens/home';
+import SplashScreen from './src/screens/splash';
 
 
+const Stack = createStackNavigator();
 
-const MainNavigator = createStackNavigator({
-  Home: {
-    screen: HomeScreen,  
-    navigationOptions: {
-      headerShown: false,
-    }
-  }, 
-});
 
-const App = createAppContainer(MainNavigator);
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+          <Stack.Screen 
+          name="splash" 
+          component={SplashScreen} 
+          options={{
+            headerShown:false
+          }}
+          />
+        <Stack.Screen 
+          name="home" 
+          component={HomeScreen} 
+          
+          options={{
+            headerShown:false
+          }}
+          />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default App;
+
+
